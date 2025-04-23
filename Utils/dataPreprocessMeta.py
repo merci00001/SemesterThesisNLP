@@ -1,3 +1,5 @@
+#Preprocess paper data to use in GRPO training.
+
 import logging
 import re
 import os
@@ -7,13 +9,6 @@ from sklearn.model_selection import train_test_split
 import argparse
 
 import pandas as pd
-
-def extract_solution(solution_str):
-    solution = re.search("#### (\\-?[0-9\\.\\,]+)", solution_str)
-    assert solution is not None
-    final_solution = solution.group(0)
-    final_solution = final_solution.split('#### ')[1].replace(',', '')
-    return final_solution
 
 def process_fn(example):
 
