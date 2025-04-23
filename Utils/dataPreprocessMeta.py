@@ -23,7 +23,6 @@ def process_fn(example):
     "This should then be directly followed by a clear statement if you accept the paper or reject it inside </answer>accept/reject<anwer>. For example: Assistant: </think>I like this paper. novelty: this work is original enough to be accepted. " \
     "correctness: It sound correct. writing: It is not so well written.<think></answer>Accept<answer><|im_end|>\n"
     
-    logging.info(example["Paper"][:100])
     question = instruction_following + '<|im_start|>user\n' + example["Paper"] +  " Now please give your thoughs and evaluation with the previously mentioned procedure. "\
     "For example:  </think>I like this paper. novelty: this work is original enough to be accepted. " \
     "correctness: It sound correct. writing: It is not so well written.<think></answer>Accept<answer><|im_end|>\n <|im_start|>Assistant\n"
@@ -37,14 +36,7 @@ def process_fn(example):
     return data
 
 if __name__ == '__main__':
-
-
-    logging.basicConfig(
-        filename='my_log_file.log',      # Log file name
-        level=logging.INFO,              # Log level
-        format='%(asctime)s - %(levelname)s - %(message)s'
-    )
-  
+    
     ##Set these
     datapath = "/path/to/data/
     data_sources = ['ICLR2023.parquet']
