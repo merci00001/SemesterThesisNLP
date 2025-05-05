@@ -35,7 +35,7 @@ data_files = {"train": "train2023.parquet"}
 dataset = load_dataset("parquet", data_files="/itet-stor/mgroepl/net_scratch/PaperData/train2023.parquet")['train'] ##train2023  eval2023Summary
 
 
-
+num_generations = 1
 model_name = "/srv/beegfs02/scratch/mgroepl_master_data/data/Qwen/Qwen/Qwen2.5-3BInstructSummary/checkpoint-6000"  #/srv/beegfs02/scratch/mgroepl_master_data/data/Qwen/Qwen/Qwen2.5-3BInstructSummary/checkpoint-6000, /srv/beegfs02/scratch/mgroepl_master_data/data/Qwen/Qwen/Qwen2.5-3BInstructFullPaperBiggerLrCORRECT/checkpoint-8500
 model = AutoModelForCausalLM.from_pretrained(
     model_name,
@@ -55,7 +55,6 @@ for x in dataset:
     try:
         y = x["ground_truth"]
         total +=1
-        num_generations = 1
         responses = []
         print("starting")
         model_inputs = tokenizer([x["prompt"]], return_tensors="pt").to(model.device)
