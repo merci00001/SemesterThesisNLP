@@ -17,10 +17,10 @@ def loadPDFtoTXT(path):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Accept a string input.")
-    parser.add_argument("--pathToPdf", type=str, help="Path to pdf")
-    parser.add_argument("--pathToModel", type=str, help="Path to model checkpoint or huggingface model name")
+    parser.add_argument("pathToPdf", type=str, help="Path to pdf")
+    parser.add_argument("pathToModel", type=str, help="Path to model checkpoint or huggingface model name")
     args = parser.parse_args()   
-    pathToPDF = args.pathToPDF
+    pathToPDF = args.pathToPdf
     logging.basicConfig(
         filename='runPaper.log',      # Log file name
         level=logging.INFO,              # Log level
