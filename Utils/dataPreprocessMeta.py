@@ -1,3 +1,5 @@
+#Converts the downloaded papers into the correct format for reinforcement learning
+
 import logging
 import re
 import os
