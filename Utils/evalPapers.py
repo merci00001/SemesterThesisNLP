@@ -7,7 +7,7 @@ import torch
 
 def getScore(input,gT):
     scores = []
-    gAccept = None
+    reject = None
     for x in input:
         res = x[-80:].split("</answer>")
 
@@ -23,20 +23,20 @@ def getScore(input,gT):
                 scores.append(-1)
             else:
                 scores.append(0)
-    return [scores, gAccept]
+    return [scores, reject]
 logging.basicConfig(
-    filename='PaperEval3BRLFullPaperGen1CORRECTEVALSCRIPTOldModel.log',      # Log file name
+    filename='PaperEval3BRLFullPapernumGen1AggrCORRECTModel.log',      # Log file name
     level=logging.INFO,              # Log level
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 logging.info("starting")
 
-
+data_files = {"train": "train2023.parquet"}
 dataset = load_dataset("parquet", data_files="/itet-stor/mgroepl/net_scratch/PaperData/train2023.parquet")['train'] ##train2023  eval2023Summary
 
 
 
-model_name = "/srv/beegfs02/scratch/mgroepl_master_data/data/Qwen/Qwen/Qwen2.5-3BInstructFullPaperBiggerLrBetterDrop/checkpoint-7500"  #/itet-stor/mgroepl/net_scratch/Qwen/Qwen2.5-3B-Instruct-FT/checkpoint-507, /srv/beegfs02/scratch/mgroepl_master_data/data/Qwen/Qwen/Qwen2.5-3BInstructFullPaperBiggerLrCORRECT/checkpoint-8500, /srv/beegfs02/scratch/mgroepl_master_data/data/Qwen/Qwen/Qwen2.5-3BInstructSummary/checkpoint-6000
+model_name = "/srv/beegfs02/scratch/mgroepl_master_data/data/Qwen/Qwen/Qwen2.5-3BInstructSummary/checkpoint-6000"  #/srv/beegfs02/scratch/mgroepl_master_data/data/Qwen/Qwen/Qwen2.5-3BInstructSummary/checkpoint-6000, /srv/beegfs02/scratch/mgroepl_master_data/data/Qwen/Qwen/Qwen2.5-3BInstructFullPaperBiggerLrCORRECT/checkpoint-8500
 model = AutoModelForCausalLM.from_pretrained(
     model_name,
     torch_dtype="auto",
@@ -58,21 +58,7 @@ for x in dataset:
         num_generations = 1
         responses = []
         print("starting")
-        prompt = lines = x["prompt"].split('<|im_end|>')
-        instruction_following =prompt[0].replace("<|im_start|>system\n","")
-        question = prompt[1].replace("<|im_start|>user","")
-
-        messages = [
-            {"role": "system", "content": instruction_following},
-            {"role": "user", "content": question}
-            ]
-        text = tokenizer.apply_chat_template(
-            messages,
-            tokenize=False,
-            add_generation_prompt=True
-        )
-        model_inputs = tokenizer([text], return_tensors="pt").to(model.device)
-
+        model_inputs = tokenizer([x["prompt"]], return_tensors="pt").to(model.device)
         u = 0
         failed = 0
         scores = []
@@ -80,10 +66,9 @@ for x in dataset:
             with torch.no_grad():
                 logging.info("generate")
 
-
                 generated_ids = model.generate(
                     **model_inputs,
-                    max_new_tokens=1000
+                    max_new_tokens=2000,
                 )
                 generated_ids = [
                     output_ids[len(input_ids):] for input_ids, output_ids in zip(model_inputs.input_ids, generated_ids)
@@ -93,7 +78,7 @@ for x in dataset:
                 logging.info(response)
                 t = getScore([response],y)
                 score = t[0]
-                acc = t[1]
+                reject = t[1]
                 if len(score) == 1:
                     scores.append(score[0])
                     u+=1
@@ -113,7 +98,7 @@ for x in dataset:
             correct +=1
             confusion["TN"] +=1
 
-        elif value < 0.5 and value>=0 and acc:
+        elif value < 0.5 and value>=0 and reject:
             confusion["FN"] +=1
         else:
             confusion["FP"] +=1
