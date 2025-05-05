@@ -15,7 +15,7 @@ Accelerate is a library that automatically enables multi gpu when using huggingf
 ## Enviroment installation
 
 First install conda. To install the correct enviroment on slurm, run the installEnv.sh script as a job. You have to set the correct paths inside the batchfile (where to store the packages and your path to your conda installation).
-This will install TRL. This should be enough to run the model, but you may have to install additional packages for every python file to run.
+This will install TRL and deepspeed. This should be enough to run the model, but chances are, some packages have to be added. 
 
 ## Known issues
 
