@@ -10,16 +10,16 @@ The a100_80gb.sh runs the script on the 80gb GPU and the a6000.sh on the 50gb on
 The python file runs via accelerate srun accelerate launch \   here come accelerate args like deepspeed config and mixed precision \ yourScript.py --yourscriptArgsHere.
 Accelerate is a library that automatically enables multi gpu when using huggingfaces TRL library. If you wish to run multi gpu, you can use multiGPU.sh. You just have to set num_processes to the amount of GPU specified (https://huggingface.co/docs/trl/main/en/deepspeed_integration). 
 
-
+To run a single pdf, you can use the runPDF.sh file. But you again have to set all the paths correctly, as well as set the path to your pdf and model.
 
 ## Enviroment installation
 
 First install conda. To install the correct enviroment on slurm, run the installEnv.sh script as a job. You have to set the correct paths inside the batchfile (where to store the packages and your path to your conda installation).
 This will install TRL and deepspeed. This should be enough to run the model, but chances are, some packages have to be added. 
 
-##Models
+## Models
 
-The model trained through biased papers but still performed the best can be found here: https://polybox.ethz.ch/index.php/s/9zGSRwbia5HcmM2
+The model trained through biased papers but still performed the best can be found here: https://polybox.ethz.ch/index.php/s/raq9JqP63aBM5M7
 
 ## Known issues
 
