@@ -24,8 +24,8 @@ head_node_ip=$(scontrol show hostnames $SLURM_JOB_NODELIST | head -n 1)
 srun accelerate launch \
     --num_processes 1 \
     /home/mgroepl/RESTORE/hFace/forwardModel.py \
-    --pathToPdf "/home/mgroepl/pdfs/Semester_Thesis-4.pdf" \
-    --pathToModel "/srv/beegfs02/scratch/mgroepl_master_data/data/Qwen/Qwen/Qwen2.5-3BInstructFullPaperBiggerLr/checkpoint-8000"
+     "/home/mgroepl/pdfs/Semester_Thesis-4.pdf" \
+     "/srv/beegfs02/scratch/mgroepl_master_data/data/Qwen/Qwen/Qwen2.5-3BInstructFullPaperBiggerLr/checkpoint-8000"
 
 
 
